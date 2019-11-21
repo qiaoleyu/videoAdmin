@@ -1,9 +1,16 @@
 <template>
   <div class="hello" style="width: 100%;margin: auto">
-     <div style="width: 900px;;height: 40px;margin: auto">
-       <div style="width: 200px;height: 20px;line-height: 20px;margin: auto">
-         <h2 style="text-align: left">{{ msg }}</h2>
-       </div>
+     <!--<div style="width: 900px;;height: 40px;margin: auto">-->
+       <div >
+         <el-row :gutter="10">
+           <el-col :span="20">
+             <h2 style="font-weight: 600;text-align: center">{{ msg }}</h2>
+           </el-col>
+           <el-col :span="4">
+             <el-button style="float: left;margin-top: 20px" plain type="primary">导出POI</el-button>
+           </el-col>
+         </el-row>
+       <!--</div>-->
 
        <!--<div style="float: left;width: 900px;height: 80px;line-height: 90px">-->
 

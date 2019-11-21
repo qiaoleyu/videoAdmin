@@ -1,43 +1,51 @@
 <template>
   <div class="hello">
-    <h2 style="font-weight: 600">{{ msg }}</h2>
+    <div >
+      <el-row :gutter="10">
+        <el-col :span="20">
+          <h2 style="font-weight: 600;text-align: center">{{ msg }}</h2>
+        </el-col>
+        <el-col :span="4">
+          <el-button style="float: left;margin-top: 20px" plain type="primary">导出POI</el-button>
+        </el-col>
+      </el-row>
+    </div>
+
       <el-table align="center"
-              :data="role"
+              :data="user"
               border
               style="width: 100%">
       <el-table-column align="center"
-                       prop="rid"
-                       label="角色编号"
+                       prop="userId"
+                       label="用户编号"
                        width="260">
       </el-table-column>
       <el-table-column align="center"
-                       prop="aid"
-                       label="管理员姓名"
+                       prop="userName"
+                       label="用户姓名"
                        width="260">
-        <template slot-scope="scope">
-          <div  v-for="(admin,index) in admin">
-            <span v-if="scope.row.aid==admin.aid">{{admin.aname}}</span>
-          </div>
-        </template>
       </el-table-column>
         <el-table-column align="center"
-                        prop="rname"
-                       label="角色名称"
+                        prop="userStatue"
+                       label="用户状态"
                        width="260"  >
       </el-table-column>
 
       <el-table-column align="center"
                        label="操作"
                        width="260">
-        <template slot-scope="role">
+        <template slot-scope="user">
 
-          <el-button type="danger" icon="el-icon-delete" circle @click="del(role.row.rid)" v-if="role.row.rid!=1">正常</el-button>
-          <el-button type="primary" icon="el-icon-edit" circle @click="update(role.row.rid)" v-if="role.row.rid!=1">禁用</el-button>
+          <el-button type="primary" @click="update(user.row.userId)" plain>审核</el-button>
+          <!--<el-button type="primary" icon="el-icon-edit" circle @click="update(role.row.rid)" v-if="role.row.rid!=1">禁用</el-button>-->
         </template>
 
       </el-table-column>
     </el-table>
+    <el-pagination background layout="prev, pager, next" :page-size="this.params.size" v-on:current-change="changePage"
+                   :total="total" :current-page="this.params.page"></el-pagination>
 
+    <el-row style="height: 20px"></el-row>
       </div>
 </template>
 <style>
@@ -51,68 +59,39 @@
     data () {
       return {
         msg: '用户详情页面',
-        role:[],
-        admin:[]
+        user:[],
+        total:0,
+        params:{
+          size:8,
+          page:1,
+        },
       }
     },
     mounted(){
       this.query()
-      this.queryRole()
     },
     methods: {
       query:function () {
-        var url ="api/findAll"
+        var url ="api/findAllUser"+"/"+this.params.page+"/"+this.params.size
         axios.get(url).then(res=>{
-          this.admin=res.data
+          this.user=res.data
 
           })
        },
-      queryRole:function () {
-        var url ="api/findAllRoles"
-        axios.get(url).then(res=>{
-          this.role=res.data
-
-        })
-      },
-      update:function (id) {
-
-        axios.get("api/unauth").then(res=>{
-          if(res.data==1){
-            this.$router.push({path:"/updateRole/"+id})
-          }if(res.data==0) {
-            this.$message.error('错了哦，您没有修改权限');
-            this.$router.push('/unauth')
-
-          }
-        })
-      },
-      del:function (id) {
-       // alert(id)
-        var url="api/deleteRole/"+id
-        axios.get(url).then(res=>{
-            if(res.data==1){
-              this.queryRole()
-              this.$message({
-                message: '恭喜你，删除角色成功',
-                type: 'success'
-              });
-            }else if(res.data==0) {
-              this.$message.error('错了哦，您没有删除权限');
-              this.$router.push('/unauth')
-            }
-            else{
-//                alert("删除失败！")
-              this.$message.error('错了哦，删除失败');
-
-            }
-        })
-
-      }
-
+//      update:function (userId) {
+//
+//        axios.get("api/unauth").then(res=>{
+//          if(res.data==1){
+//            this.$router.push({path:"/updateRole/"+userId})
+//          }if(res.data==0) {
+//            this.$message.error('错了哦，您没有修改权限');
+//            this.$router.push('/unauth')
+//
+//          }
+//        })
+//      },
 
     }
-
-
   }
 </script>
 
