@@ -1,35 +1,26 @@
 <template>
-  <div style="width: 100%;margin: auto">
-    <span style="font-size: 36px;font-weight: bolder" >{{msg}}</span>
-    <!--<el-image src="http://pxx4c7852.bkt.clouddn.com/url1.jpg" style="width: 100%"></el-image>-->
-    <br>
-    <br>
+  <div style="width: 100%;margin: auto;">
     <el-container>
-      <el-header class="app-header">
-        <el-breadcrumb separator-class="iconfont el-icon-arrow-right" style="margin-left: 40px;line-height: 60px;width: 700px;float: left;font-size: 16px">
-          <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;line-height: 60px;float: left">
-            <el-radio-button :label="false">展开</el-radio-button>
-            <el-radio-button :label="true">收起</el-radio-button>
-          </el-radio-group>
-          <el-menu default-active="/"
-                   router
-                   class="el-menu-demo tab-page"
-                   mode="horizontal"
-                   active-text-color="#409EFF">
-            <!--<el-menu-item index="/">首页</el-menu-item>-->
-            <!--<el-menu-item index="/admin">首页</el-menu-item>-->
-            <el-menu-item index="/role">角色管理</el-menu-item>
-            <el-menu-item index="/permission">权限管理</el-menu-item>
-            <el-menu-item index="/administrator">管理员管理</el-menu-item>
-            <el-menu-item index="/shops">商品管理</el-menu-item>
-            <el-menu-item index="/showKinds">类别管理</el-menu-item>
-          </el-menu>
-        </el-breadcrumb>
+      <el-header class="app-header" style="margin-bottom: 10px">
+        <!--<el-breadcrumb separator-class="iconfont el-icon-arrow-right" style="margin-left: 40px;line-height: 60px;width: 700px;float: left;font-size: 16px;background: url('../static/img/girl2.jpeg')">-->
+          <!--<el-menu default-active="/"-->
+                   <!--router-->
+                   <!--class="el-menu-demo tab-page"-->
+                   <!--mode="horizontal"-->
+                   <!--style="margin-left: 130px"-->
+                   <!--active-text-color="#409EFF">-->
+            <!--<el-menu-item index="/user">用户管理</el-menu-item>-->
+            <!--<el-menu-item index="/comment">评论管理</el-menu-item>-->
+            <!--<el-menu-item index="/video">视频管理</el-menu-item>-->
+          <!--</el-menu>-->
 
-        <div style="width: 400px;text-align: right;float: right;margin-right: 40px">
+        <!--</el-breadcrumb>-->
+
+        <div style="width: 100%;text-align: right;float: right;padding-right:60px;background: url('../static/img/girl2.jpeg')">
+          <span style="font-size: 36px;font-weight: bolder;width: 75%;float: left" >{{msg}}</span>
           <!--<span style="margin-right: 15px" @click="logout()">退出登录</span>-->
          <el-dropdown>
-          <i class="el-icon-setting" style="margin-right: 15px;size: 40px;font-size: 20px"></i>
+          <i class="el-icon-setting" style="margin-right: 15px;size: 40px;font-size: 20px;cursor: pointer"></i>
           <el-dropdown-menu slot="dropdown">
           <el-dropdown-item class="el-icon-delete"><span @click="logout()">退出</span></el-dropdown-item>
           </el-dropdown-menu>
@@ -38,141 +29,33 @@
         </div>
       </el-header>
 
-        <el-container style="height: 800px; border: 1px solid #eee">
+        <el-container style="height: 800px;border: 1px solid #eee">
           <!--<el-aside width="200px" style="background-color: rgb(238, 241, 246)">-->
             <el-aside class="app-side app-side-left"
-            style="width: inherit;">
-              <!--<el-menu-->
-                <!--router-->
-                <!--class="el-menu-vertical-demo"-->
-              <!--@open="handleOpen"-->
-              <!--@close="handleClose"-->
-              <!--:collapse="isCollapse"-->
-              <!--&gt;-->
-                <!--<template v-for="route in $router.options.routes" v-if="route.children && route.children.length">-->
-                  <!--<template v-for="item in route.children" >-->
-                    <!--<el-menu-item-->
-                      <!--:key="route.path + '/' + item.path"-->
-                      <!--:index="item.path"-->
-                    <!--&gt;-->
-                      <!--<i class="el-icon-menu"></i>-->
-                      <!--<span slot="title">{{ item.name }}</span>-->
-                    <!--</el-menu-item>-->
-                  <!--</template>-->
-                <!--</template>-->
-              <!--</el-menu>-->
-            <!--</el-aside>-->
+            style="width: inherit;height: 800px; border: 1px solid #eee">
+              <el-menu
+                router
+                class="el-menu-vertical-demo"
+                style="background-color: #34B3FA;height: 100%;font-weight: bolder"
+              >
 
-            <el-menu :default-active="this.$route.children"
-                     class="el-menu-vertical-demo"
-                     @open="handleOpen"
-                     @close="handleClose"
-                     :collapse="isCollapse" background-color="#545c64"
-                     text-color="#fff"
-                     active-text-color="#ffd04b"
-                     router>
-              <el-submenu index="1">
-                <template slot="title">
-                  <i class="el-icon-message"></i>
-                  <span slot="title">角色管理</span>
-                </template>
-                <!--<el-menu-item-group>-->
-                  <!--<span slot="title">权限设置</span>-->
-                  <el-menu-item index="/role" class="el-icon-document">查看</el-menu-item>
-                  <el-menu-item index="/addRole" class="el-icon-circle-plus">添加</el-menu-item>
-                  <el-menu-item index="/updateRole" class="el-icon-edit" disabled>修改</el-menu-item>
-                  <!--<el-menu-item index="1-3" class="el-icon-edit">修改</el-menu-item>-->
-                  <!--<el-menu-item index="1-4" class="el-icon-delete">删除</el-menu-item>-->
-                <!--</el-menu-item-group>-->
-                <!--<el-menu-item-group title="管理员维护">-->
-                  <!--<el-menu-item index="1-3" class="el-icon-document">查|删</el-menu-item>-->
-                  <!--<el-menu-item index="1-4" class="el-icon-circle-plus">添加</el-menu-item>-->
-                  <!--&lt;!&ndash;<el-menu-item index="1-7" class="el-icon-delete"></el-menu-item>&ndash;&gt;-->
-                <!--</el-menu-item-group>-->
-              </el-submenu>
-              <el-submenu index="2">
-                <template slot="title">
-                  <i class="el-icon-setting"></i>
-                  <span slot="title">权限管理</span>
-                </template>
-                <!--<el-menu-item-group>-->
-                <!--<span slot="title">权限设置</span>-->
-                <el-menu-item index="/permission" class="el-icon-document">查看</el-menu-item>
-                <el-menu-item index="/addPermission" class="el-icon-circle-plus">添加</el-menu-item>
-                <el-menu-item index="/updatePermission" class="el-icon-edit" disabled>修改</el-menu-item>
-              </el-submenu>
-              <el-submenu index="3">
-                <template slot="title">
-                  <i class="el-icon-s-custom"></i>
-                  <span slot="title">管理操作</span>
-                </template>
-                <!--<el-menu-item-group>-->
-                  <!--<span slot="title">权限设置</span>-->
+                  <el-menu-item index="/user" style="height: 10%">
+                    <i class="el-icon-user"></i>
+                    <span slot="title" style="font-size: 15px;">用户管理</span>
+                  </el-menu-item>
+                  <el-menu-item index="/comment" style="height: 10%" >
+                    <i class="el-icon-message"></i>
+                    <span slot="title" style="font-size: 15px;">评论管理</span>
+                  </el-menu-item>
+                  <el-menu-item index="/video" style="height: 10%" >
+                    <i class="el-icon-video-camera"></i>
+                    <span slot="title" style="font-size: 15px;">视频审核</span>
+                  </el-menu-item>
 
-                <el-menu-item index="/administrator" class="el-icon-document">查看</el-menu-item>
-                <el-menu-item index="/addAdmin" class="el-icon-circle-plus">添加</el-menu-item>
-                <el-menu-item index="/updateAdmin" class="el-icon-edit" disabled>修改</el-menu-item>
 
-                  <!--<el-menu-item index="3-1" class="el-icon-circle-plus">信息维护</el-menu-item>-->
-                  <!--<el-menu-item index="3-2" class="el-icon-edit">修改密码</el-menu-item>-->
-                  <!--<el-menu-item index="3-3" class="el-icon-delete">注销账户</el-menu-item>-->
-                <!--</el-menu-item-group>-->
-              </el-submenu>
-              <el-submenu index="4">
-                <template slot="title">
-                  <i class="el-icon-s-cooperation"></i>
-                  <span slot="title">商品管理</span>
-                </template>
-                <!--<el-menu-item-group>-->
-                  <!--<span slot="title">类别管理</span>-->
-                  <el-menu-item index="/shops" class="el-icon-document">查看</el-menu-item>
-                  <el-menu-item index="/addShops" class="el-icon-circle-plus">添加</el-menu-item>
-                  <el-menu-item index="/updateShops" class="el-icon-edit" disabled>修改</el-menu-item>
-                  <el-menu-item index="/saleShow" class="el-icon-s-operation">销量</el-menu-item>
-                  <!--<el-menu-item index="3-3" class="el-icon-edit">修改</el-menu-item>-->
-                  <!--<el-menu-item index="3-4" class="el-icon-delete">删除</el-menu-item>-->
-                <!--</el-menu-item-group>-->
-                <!--<el-menu-item-group>-->
-                  <!--<span slot="title">商品管理</span>-->
-                  <!--<el-menu-item index="3-3" class="el-icon-document">查看</el-menu-item>-->
-                  <!--<el-menu-item index="3-4" class="el-icon-circle-plus">添加</el-menu-item>-->
-                  <!--&lt;!&ndash;<el-menu-item index="3-7" class="el-icon-edit"></el-menu-item>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<el-menu-item index="3-8" class="el-icon-delete"></el-menu-item>&ndash;&gt;-->
-                <!--</el-menu-item-group>-->
-              </el-submenu>
-              <el-submenu index="5">
-                <template slot="title">
-                  <i class="el-icon-menu"></i>
-                  <span slot="title">类别管理</span>
-                </template>
-                <!--<el-menu-item-group>-->
-                <!--<span slot="title">类别管理</span>-->
-                <el-menu-item index="/showKinds" class="el-icon-document">查看</el-menu-item>
-                <el-menu-item index="/addShopKinds" class="el-icon-circle-plus">添加</el-menu-item>
-                <el-menu-item index="/updateShopKinds" class="el-icon-edit" disabled>修改</el-menu-item>
-              </el-submenu>
-              <el-submenu index="6">
-                <template slot="title">
-                  <i class="el-icon-menu"></i>
-                  <span slot="title">用户管理</span>
-                </template>
-                <!--<el-menu-item-group>-->
-                <!--<span slot="title">类别管理</span>-->
-                <el-menu-item index="/userManager" class="el-icon-document">查看</el-menu-item>
-                <!--<el-menu-item index="/addShopKinds" class="el-icon-circle-plus">添加</el-menu-item>-->
-                <el-menu-item index="/updateShopKinds" class="el-icon-edit" disabled>修改</el-menu-item>
-              </el-submenu>
-            </el-menu>
+              </el-menu>
           </el-aside>
-          <el-main>
-              <!--<el-table :data="tableData">-->
-                <!--<el-table-column prop="date" label="日期" width="140">-->
-                <!--</el-table-column>-->
-                <!--<el-table-column prop="name" label="姓名" width="120">-->
-                <!--</el-table-column>-->
-                <!--<el-table-column prop="address" label="地址">-->
-                <!--</el-table-column>-->
-              <!--</el-table>-->
+          <el-main style="background: #f5f5f5 url('../static/img/bg.jpg') no-repeat center;background-size: cover;">
             <template>
               <router-view/>
             </template>
@@ -180,7 +63,7 @@
         </el-container>
         <!--</el-container>-->
       <!--</el-container>-->
-      <el-footer style="font-weight: bolder">
+      <el-footer style="font-weight: bolder;background: #f5f5f5 url('../static/img/bg.jpg') no-repeat center;background-size: cover;">
         <el-image src="../static/img/bala2.gif" style="height: 80px;width:100px"></el-image>
       </el-footer>
     </el-container>
@@ -190,7 +73,9 @@
 
 <style>
 
-
+  .el-header{
+    padding: 0;
+  }
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
     min-height: 400px;
@@ -271,7 +156,7 @@
       ElFooter},
     data(){
           return{
-              msg:'Welcome to 后台管理界面',
+              msg:'Welcome视频管理界面',
             tabPosition: 'left',
             isCollapse: false,
             adminName:'未登录'
