@@ -28,10 +28,15 @@
                        width="260">
       </el-table-column>
         <el-table-column align="center"
-                        prop="userStatue"
                        label="用户状态"
                        width="260"  >
-      </el-table-column>
+          <template slot-scope="scope">
+            <span v-if="scope.row.userStatue==0">未激活</span>
+            <span v-if="scope.row.userStatue==1">正常</span>
+            <span v-if="scope.row.userStatue==2">禁用</span>
+          </template>
+
+        </el-table-column>
 
       <el-table-column align="center"
                        label="操作"
@@ -57,6 +62,7 @@
 </style>
 <script>
   import axios from 'axios'
+  import swal from 'sweetalert'
   export default {
     data () {
       return {
@@ -80,18 +86,24 @@
 
           })
        },
-//      update:function (userId) {
-//
-//        axios.get("api/unauth").then(res=>{
-//          if(res.data==1){
-//            this.$router.push({path:"/updateRole/"+userId})
-//          }if(res.data==0) {
-//            this.$message.error('错了哦，您没有修改权限');
-//            this.$router.push('/unauth')
-//
-//          }
-//        })
-//      },
+      update:function (userId) {
+        axios.get("api/updateUserStatue"+"/"+userId).then(res=>{
+          if(res.data!=null){
+            swal({
+              text: "审核成功！",
+              icon: "success",
+              button: "确定",
+            });
+            this.query()
+          }else{
+            swal({
+              text: "审核失败！",
+              icon: "info",
+              button: "确定",
+            });
+          }
+        })
+      },
 
     }
   }

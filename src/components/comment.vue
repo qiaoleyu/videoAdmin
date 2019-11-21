@@ -46,23 +46,52 @@
 
 
     <!--<el-button type="primary" round @click="toinsert()">新增商品</el-button>-->
-    <el-table :data="shops" stripe style="width: 100%;">
-      <el-table-column prop="shopId" label="用户ID" width="180"> </el-table-column>
+    <el-table :data="comment" stripe style="width: 100%;">
+      <el-table-column
+        prop="videoId"
+        label="视频ID"
+        width="80">
+      </el-table-column>
 
-      <el-table-column label="用户头像" width="180" >
+      <el-table-column
+        prop="commentId"
+        label="评论ID"
+        width="80">
+      </el-table-column>
+
+      <el-table-column
+        prop="userName"
+        label="用户ID"
+        width="80">
+      </el-table-column>
+
+      <el-table-column
+        label="用户头像"
+        width="80" >
         <template slot-scope="scope">
-          <img :src="scope.row.shopBigPic" width="40" height="40" class="pic"/>
+          <img :src="scope.row.userPic" width="40" height="40" class="pic"/>
         </template>
       </el-table-column>
 
-      <el-table-column prop="shopName" label="标题内容" width="180"></el-table-column>
-      <el-table-column prop="factory" label="评论者" width="180"></el-table-column>
-      <el-table-column prop="shopInfo" label="评论内容" width="180"></el-table-column>
+      <el-table-column
+        prop="commentContent"
+        label="评论内容"
+        width="260">
+      </el-table-column>
+
+      <el-table-column align="center"
+                       label="评论状态"
+                       width="180"  >
+        <template slot-scope="scope">
+          <span v-if="scope.row.commentStatue==0">正常</span>
+          <span v-if="scope.row.commentStatue==1">禁言</span>
+        </template>
+
+      </el-table-column>
       <el-table-column label="操作" width="150">
         <el-button-group slot-scope="scope">
-          <el-button type="primary" plain icon="el-icon-edit" @click="toupdate(scope.row.shopId)">审核通过</el-button>
-          <el-button type="primary" plain icon="el-icon-delete" @click="deleteUser(scope.row.shopId,scope.row.skId)">举报</el-button>
-          <el-button type="primary" plain icon="el-icon-edit" @click="toupdate(scope.row.shopId)">小黑屋</el-button>
+          <el-button type="primary" plain icon="el-icon-edit" @click="update(scope.row.commentId)">审核</el-button>
+          <!--<el-button type="primary" plain icon="el-icon-delete" @click="deleteUser(scope.row.commentId)">举报</el-button>-->
         </el-button-group>
       </el-table-column>
     </el-table>
@@ -91,137 +120,48 @@
       ElButton,
       ElInput,
       ElRow},
-    name: 'shops',
+    name: 'comment',
     data (){
       return {
         input:'',
         msg: '评论信息展示',
-        shops:[],
-        shopKinds:[],
+        comment:[],
         total:0,
         params:{
           size:8,
           page:1,
         },
-        orderBy:[{
-          name: 'shopPrice',
-          info: '商品价格'
-          }, {
-          name: 'shopNumber',
-          info: '商品销量'
-          }, {
-          name: 'skName',
-          info: '商品类别'
-          }],
-        options: [{
-          value: 'shopName',
-          label: '商品名称'
-        }, {
-          value: 'shopInfo',
-          label: '商品描述'
-        }],
-        value: '',
-        name:''
-      }
 
+      }
     },
     mounted(){
-      this.queryShopKinds();
-        this.queryShops();
-
+      this.query();
     },
     methods:{
-
-      search:function () {
-          axios.post("api/xm-shop/findByValues/"+this.params.page+"/"+this.params.size,{value:this.value,name:this.input}).then(res=>{
-              if (res.data!=null){
-                this.shops = res.data.list;
-                this.total=res.data.total;
-              }else {
-//                  alert("无此类商品")
-                this.$message.error('错了哦，无此类商品');
-
-              }
-          })
-        },
-      orderShops:function () {
-          console.log(this.name);
-        axios.post("api/xm-shop/orderShops/"+this.params.page+"/"+this.params.size+"/"+this.name).then(res=>{
-            if (res.data!=null){
-              this.shops = res.data.list;
-              this.total=res.data.total;
-            }else {
-//              alert("无此类商品")
-              this.$message.error('错了哦，无此类商品');
-
-            }
+      query:function () {
+        axios.get("api/findAllComment/"+this.params.page+"/"+this.params.size).then(res=>{
+          this.comment = res.data;
         })
-
       },
-
-      toinsert:function () {
-        this.$router.push('/addShops');
-       /* axios.get("api/xm-shop/unauth").then(res=>{
-          if(res.data==1){
-            this.$router.push('/addShops');
-          }if(res.data==0) {
-            this.$message.error('错了哦，您没有添加商品的权限');
-            this.$router.push('/unauth')
-          }
-        })*/
-      },
-      toupdate:function (shopId) {
-        this.$router.push({path:'/updateShops/'+shopId})
-
-      },
-      deleteUser:function (shopId,skId) {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          axios.get("api/xm-shop/deleteShops/"+shopId+"/"+skId).then(res=>{
-            if(res.data==1){
-              this.queryShops();
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
+      update:function(commentId){
+          axiox.get("api/updateCommentStatue/"+commentId).then(res=>{
+            if(res.data!=null){
+              swal({
+                text: "审核成功！",
+                icon: "success",
+                button: "确定",
               });
-            }else if(res.data==0) {
-              this.$router.push('/unauth')
+              this.query()
+            }else{
+              swal({
+                text: "审核失败！",
+                icon: "info",
+                button: "确定",
+              });
             }
           })
-
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      },
-      changePage:function (page) {
-        this.params.page=page;
-        if (this.value!=''&& this.input!=''){
-          this.search();
-        }else if (this.name!='') {
-            this.orderShops();
-        }else{
-          this.queryShops();
-        }
-      },
-      queryShops:function() {
-        var url = "api/xm-shop/findAllShops/"+this.params.page+"/"+this.params.size;
-        axios.get(url).then(res => {
-          this.shops = res.data.list;
-          this.total=res.data.total;
-        })
-      },
-      queryShopKinds:function() {
-        var url = "api/xm-shop/show1";
-        axios.get(url).then(res => {
-          this.shopKinds = res.data;
-        })
       }
+
     }
   }
 </script>
