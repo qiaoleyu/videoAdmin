@@ -72,8 +72,6 @@
     },
     methods: {
       login:function () {
-
-
           this.$refs['admin'].validate((valid)=>{
               if(valid){
 //                  alert("submit");
@@ -83,19 +81,19 @@
                 //发送请求 把参数发给后端（把用户名和密码发给后端 验证是否存在这个账号）
                 axios.post("api/adminLogin", {loginName:this.admin.loginName,password:this.admin.password}).then(res=>{
                     //接收后端返回来的数据
-                  if(res.data=="success"){
+                  if(res.data.success=="success"){
 //                      alert("登录成功！");
 //                    alert(this.admin.aname);
-                    Cookies.set('name',this.admin.loginName,{ expires: 7, path: '/' });
+                    Cookies.set('name',res.data.aname,{ expires: 7, path: '/' });
                     this.$message({
                       message: '恭喜你，登录成功',
                       type: 'success'
                     });
-                    this.$router.push("/shops");
+                    this.$router.push("/admin");
                   }else{
 //                      alert("登录失败");
                     this.$message.error('错了哦，登录失败');
-                    this.$router.push("/adminLogin");
+                    this.$router.push("/");
                   }
                 })
               }else{
