@@ -6,7 +6,9 @@
           <h2 style="font-weight: 600;text-align: center">{{ msg }}</h2>
         </el-col>
         <el-col :span="4">
-          <el-button style="float: left;margin-top: 20px" plain type="primary">导出POI</el-button>
+          <form action="api/exportUser" method="post">
+            <button style="float: left;margin-top: 30px">导出Excel</button>
+          </form>
         </el-col>
       </el-row>
     </div>

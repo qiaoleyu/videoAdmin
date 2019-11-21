@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="hello" style="width: 100%;margin: auto">
      <!--<div style="width: 900px;;height: 40px;margin: auto">-->
        <div >
@@ -7,7 +7,9 @@
              <h2 style="font-weight: 600;text-align: center">{{ msg }}</h2>
            </el-col>
            <el-col :span="4">
-             <el-button style="float: left;margin-top: 20px" plain type="primary">导出POI</el-button>
+               <form action="api/exportVideo" method="post">
+                 <button style="float: left;margin-top: 30px">导出Excel</button>
+               </form>
            </el-col>
          </el-row>
        <!--</div>-->
@@ -134,6 +136,9 @@
 
     },
     methods:{
+      exportData:function () {
+        axios.post("api/export")
+      },
 
       search:function () {
           axios.post("api/xm-shop/findByValues/"+this.params.page+"/"+this.params.size,{value:this.value,name:this.input}).then(res=>{
