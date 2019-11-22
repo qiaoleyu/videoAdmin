@@ -12,71 +12,78 @@
                </form>
            </el-col>
          </el-row>
-       <!--</div>-->
+       </div>
 
-       <!--<div style="float: left;width: 900px;height: 80px;line-height: 90px">-->
-
-       <!--<template>-->
-         <!--<el-select v-model="value" placeholder="请选择">-->
-           <!--<el-option-->
-             <!--v-for="item in options"-->
-             <!--:key="item.value"-->
-             <!--:label="item.label"-->
-             <!--:value="item.value">-->
-           <!--</el-option>-->
-         <!--</el-select>-->
-       <!--</template>-->
-      <!--<el-input type="text" style="width: 200px;height: 40px"-->
-                <!--v-model="input" placeholder="输入要查询内容"></el-input>-->
-       <!--<el-button plain type="primary" style="width: 80px;height: 40px" @click="search()">查询</el-button>-->
-         <!--<template>-->
-           <!--<el-select v-model="name" placeholder="请选择">-->
-             <!--<el-option-->
-               <!--v-for="item in orderBy"-->
-               <!--:key="item.name"-->
-               <!--:label="item.info"-->
-               <!--:value="item.name">-->
-             <!--</el-option>-->
-           <!--</el-select>-->
-         <!--</template>-->
-         <!--<el-button plain type="primary" style="width: 80px;height: 40px" @click="orderShops()">排序-->
-         <!--</el-button>-->
-       <!--</div>-->
-     </div>
-
-
-    <!--<el-button type="primary" round @click="toinsert()">新增商品</el-button>-->
-    <el-table :data="shops" stripe style="width: 100%;">
-      <el-table-column prop="shopId" label="编号" width="180"> </el-table-column>
-
-      <el-table-column label="封面" width="180" >
+    <el-table align="center"
+              :data="video"
+              border
+              style="width: 100%">
+      <el-table-column align="center"
+                       prop="videoId"
+                       label="视频编号"
+                       width="50">
+      </el-table-column>
+      <el-table-column align="center"
+                       prop="videoName"
+                       label="视频名称"
+                       width="80">
+      </el-table-column>
+      <el-table-column align="center"
+        label="视频封面"
+        width="80" >
         <template slot-scope="scope">
-          <img :src="scope.row.shopBigPic" width="40" height="40" class="pic"/>
+          <img :src="scope.row.videoPic" width="40" height="40" class="pic"/>
         </template>
       </el-table-column>
-
-      <el-table-column prop="shopName" label="视频名称" width="180"></el-table-column>
-      <el-table-column prop="shopInfo" label="视频详情描述" width="180"></el-table-column>
-      <el-table-column prop="skId" label="视频类别">
-        <template slot-scope="scope">
-          <div  v-for="(shopKinds,index) in shopKinds">
-            <span v-if="scope.row.skId==shopKinds.skId">{{shopKinds.skName}}</span>
-          </div>
-        </template>
+      <el-table-column align="center"
+                       prop="videoInfo"
+                       label="视频介绍信息"
+                       width="260">
       </el-table-column>
-      <el-table-column label="操作" width="150">
-        <el-button-group slot-scope="scope">
-          <el-button type="primary" plain icon="el-icon-edit" @click="toupdate(scope.row.shopId)">审核通过</el-button>
-          <el-button type="primary" plain icon="el-icon-delete" @click="deleteUser(scope.row.shopId,scope.row.skId)">审核未通过</el-button>
-        </el-button-group>
+      <el-table-column align="center"
+                       label="视频详情"
+                       width="260">
+        <video  width=100%  style="margin: auto;height:130px;border-radius: 10px"    class="video-js vjs-default-skin vjs-big-play-centered" playRate controls>
+          <source :src="video.videoUrl"
+                   type="video/mp4">
+        </video>
+      </el-table-column>
+      <el-table-column align="center"
+                       prop="videoUsername"
+                       label="视频发布人"
+                       width="80">
+      </el-table-column>
+      <el-table-column align="center"
+                       type="Date"
+                       prop="videoUptime"
+                       label="视频上传时间"
+                       width="100">
+      </el-table-column>
+      <el-table-column align="center"
+                       label="视频状态"
+                       width="80"  >
+        <template slot-scope="scope">
+          <span v-if="scope.row.videoStatue==0">未审核</span>
+          <span v-if="scope.row.videoStatue==1">正常</span>
+          <span v-if="scope.row.videoStatue==2">VIP视频</span>
+          <span v-if="scope.row.videoStatue==3">禁播</span>
+        </template>
+
+      </el-table-column>
+
+      <el-table-column align="center"
+                       label="操作"
+                       width="105">
+        <template slot-scope="video">
+          <el-button type="primary" @click="update(video.row.videoId)" plain>审核</el-button>
+        </template>
+
       </el-table-column>
     </el-table>
-
     <el-pagination background layout="prev, pager, next" :page-size="this.params.size" v-on:current-change="changePage"
                    :total="total" :current-page="this.params.page"></el-pagination>
 
     <el-row style="height: 20px"></el-row>
-
   </div>
 </template>
 
@@ -99,137 +106,48 @@
     name: 'shops',
     data (){
       return {
-        input:'',
-        msg: '视频信息展示',
-        shops:[],
-        shopKinds:[],
+        msg: '视频详情页面',
+        video:[],
         total:0,
         params:{
           size:8,
           page:1,
         },
-        orderBy:[{
-          name: 'shopPrice',
-          info: '商品价格'
-          }, {
-          name: 'shopNumber',
-          info: '商品销量'
-          }, {
-          name: 'skName',
-          info: '商品类别'
-          }],
-        options: [{
-          value: 'shopName',
-          label: '商品名称'
-        }, {
-          value: 'shopInfo',
-          label: '商品描述'
-        }],
-        value: '',
-        name:''
       }
-
     },
     mounted(){
-      this.queryShopKinds();
-        this.queryShops();
-
+      this.query();
     },
     methods:{
-      exportData:function () {
-        axios.post("api/export")
-      },
-
-      search:function () {
-          axios.post("api/xm-shop/findByValues/"+this.params.page+"/"+this.params.size,{value:this.value,name:this.input}).then(res=>{
-              if (res.data!=null){
-                this.shops = res.data.list;
-                this.total=res.data.total;
-              }else {
-//                  alert("无此类商品")
-                this.$message.error('错了哦，无此类商品');
-
-              }
-          })
-        },
-      orderShops:function () {
-          console.log(this.name);
-        axios.post("api/xm-shop/orderShops/"+this.params.page+"/"+this.params.size+"/"+this.name).then(res=>{
-            if (res.data!=null){
-              this.shops = res.data.list;
-              this.total=res.data.total;
-            }else {
-//              alert("无此类商品")
-              this.$message.error('错了哦，无此类商品');
-
-            }
-        })
-
-      },
-
-      /*toinsert:function () {
-        this.$router.push('/addShops');
-       /!* axios.get("api/xm-shop/unauth").then(res=>{
-          if(res.data==1){
-            this.$router.push('/addShops');
-          }if(res.data==0) {
-            this.$message.error('错了哦，您没有添加商品的权限');
-            this.$router.push('/unauth')
-          }
-        })*!/
-      },*/
-      toupdate:function (shopId) {
-        this.$router.push({path:'/updateShops/'+shopId})
-
-      },
-      deleteUser:function (shopId,skId) {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          axios.get("api/xm-shop/deleteShops/"+shopId+"/"+skId).then(res=>{
-            if(res.data==1){
-              this.queryShops();
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
-            }else if(res.data==0) {
-              this.$router.push('/unauth')
-            }
-          })
-
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      },
-      changePage:function (page) {
-        this.params.page=page;
-        if (this.value!=''&& this.input!=''){
-          this.search();
-        }else if (this.name!='') {
-            this.orderShops();
-        }else{
-          this.queryShops();
-        }
-      },
-      queryShops:function() {
-        var url = "api/xm-shop/findAllShops/"+this.params.page+"/"+this.params.size;
-        axios.get(url).then(res => {
-          this.shops = res.data.list;
+      query:function () {
+        var url ="api/findAllVideo/"+this.params.page+"/"+this.params.size
+        axios.get(url).then(res=>{
+          this.video = res.data.list;
           this.total=res.data.total;
         })
       },
-      queryShopKinds:function() {
-        var url = "api/xm-shop/show1";
-        axios.get(url).then(res => {
-          this.shopKinds = res.data;
+      update:function (videoId) {
+        axios.get("api/updateVideoStatue/"+videoId).then(res=>{
+          if(res.data!=null){
+            swal({
+              text: "审核成功！",
+              icon: "success",
+              button: "确定",
+            });
+            this.query()
+          }else{
+            swal({
+              text: "审核失败！",
+              icon: "error",
+              button: "确定",
+            });
+          }
         })
-      }
+      },
+      changePage:function (page) {
+        this.params.page=page;
+        this.query();
+      },
     }
   }
 </script>

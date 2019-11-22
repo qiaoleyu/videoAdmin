@@ -32,8 +32,9 @@
                        width="260"  >
           <template slot-scope="scope">
             <span v-if="scope.row.userStatue==0">未激活</span>
-            <span v-if="scope.row.userStatue==1">正常</span>
-            <span v-if="scope.row.userStatue==2">禁用</span>
+            <span v-if="scope.row.userStatue==2">正常</span>
+            <span v-if="scope.row.userStatue==1">VIP</span>
+            <span v-if="scope.row.userStatue==3">禁用</span>
           </template>
 
         </el-table-column>
@@ -43,7 +44,7 @@
                        width="260">
         <template slot-scope="user">
 
-          <el-button type="primary" @click="update(user.row.userId)" plain>审核</el-button>
+          <el-button type="primary" @click="update(user.row.userId)" plain>禁用</el-button>
           <!--<el-button type="primary" icon="el-icon-edit" circle @click="update(role.row.rid)" v-if="role.row.rid!=1">禁用</el-button>-->
         </template>
 
@@ -82,9 +83,9 @@
       query:function () {
         var url ="api/findAllUser"+"/"+this.params.page+"/"+this.params.size
         axios.get(url).then(res=>{
-          this.user=res.data
-
-          })
+          this.user = res.data.list;
+          this.total=res.data.total;
+        })
        },
       update:function (userId) {
         axios.get("api/updateUserStatue"+"/"+userId).then(res=>{
