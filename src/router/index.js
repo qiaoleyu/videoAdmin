@@ -6,6 +6,7 @@ import index from '@/components/index'
 import comment from '@/components/comment'
 import user from '@/components/user'
 import video from '@/components/video'
+import echarts from '@/components/echarts'
 
 Vue.use(Router)
 
@@ -28,6 +29,10 @@ export default new Router({
       path: '/',
       name: 'adminLogin',
       component: adminLogin
-    },
+    },{
+      path: '/echarts',
+      name: 'echarts',
+      component: echarts
+    }
   ]
 })
