@@ -18,6 +18,7 @@
 
         <div style="width: 100%;text-align: right;float: right;padding-right:60px;background: url('../static/img/girl2.jpeg')">
           <span style="font-size: 36px;font-weight: bolder;width: 75%;float: left" >{{msg}}</span>
+          
           <!--<span style="margin-right: 15px" @click="logout()">退出登录</span>-->
          <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 15px;size: 40px;font-size: 20px;cursor: pointer"></i>
